@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import { VALUES_BY_ID } from '@/lib/values';
+import { useTierStore } from '@/store/tier-store';
 
 function hashColor(str: string): string {
   let hash = 0;
@@ -19,6 +20,7 @@ interface DragOverlayCardProps {
 
 export function DragOverlayCard({ valueId }: DragOverlayCardProps) {
   const value = VALUES_BY_ID[valueId];
+  const isTopPick = useTierStore((s) => s.topPicks.includes(valueId));
   const [imgError, setImgError] = useState(false);
 
   if (!value) return null;
@@ -27,8 +29,8 @@ export function DragOverlayCard({ valueId }: DragOverlayCardProps) {
 
   return (
     <div
-      className={`relative flex items-center justify-center w-[64px] h-[64px] md:w-[80px] md:h-[80px] rounded text-white text-xs font-bold select-none shadow-xl scale-105 cursor-grabbing overflow-hidden ${
-        value.isTopPick ? 'ring-2 ring-amber-400' : ''
+      className={`relative flex items-center justify-center w-[64px] h-[64px] md:w-[72px] md:h-[72px] lg:w-[80px] lg:h-[80px] rounded text-white text-xs font-bold select-none shadow-xl scale-105 cursor-grabbing overflow-hidden ${
+        isTopPick ? 'ring-2 ring-amber-400' : ''
       }`}
       style={{ backgroundColor: imgError ? bgColor : 'transparent' }}
     >

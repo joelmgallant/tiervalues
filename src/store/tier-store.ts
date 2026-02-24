@@ -5,10 +5,14 @@ import { nanoid } from 'nanoid';
 import { TierListState, TierListActions } from '@/types';
 import { DEFAULT_TIERS } from '@/lib/default-tiers';
 import { INITIAL_ASSIGNMENTS } from '@/lib/initial-state';
+import { VALUES } from '@/lib/values';
+
+const INITIAL_TOP_PICKS = VALUES.filter((v) => v.isTopPick).map((v) => v.id);
 
 const initialState: TierListState = {
   tiers: DEFAULT_TIERS,
   assignments: INITIAL_ASSIGNMENTS,
+  topPicks: INITIAL_TOP_PICKS,
   activeValueId: null,
 };
 
@@ -56,6 +60,16 @@ export const useTierStore = create<TierListState & TierListActions>()(
         }),
 
       setActiveValueId: (id) => set({ activeValueId: id }),
+
+      toggleTopPick: (valueId) =>
+        set((state) => {
+          const isCurrently = state.topPicks.includes(valueId);
+          return {
+            topPicks: isCurrently
+              ? state.topPicks.filter((id) => id !== valueId)
+              : [...state.topPicks, valueId],
+          };
+        }),
 
       addTier: (label, color) =>
         set((state) => {
@@ -118,6 +132,7 @@ export const useTierStore = create<TierListState & TierListActions>()(
       partialize: (state) => ({
         tiers: state.tiers,
         assignments: state.assignments,
+        topPicks: state.topPicks,
       }),
     }
   )

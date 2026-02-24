@@ -23,6 +23,7 @@ export interface TierAssignments {
 export interface TierListState {
   tiers: Tier[];
   assignments: TierAssignments;
+  topPicks: string[];
   activeValueId: string | null;
 }
 
@@ -31,6 +32,7 @@ export interface TierListActions {
   moveValue: (valueId: string, fromTierId: string, toTierId: string, newIndex: number) => void;
   reorderValue: (tierId: string, fromIndex: number, toIndex: number) => void;
   setActiveValueId: (id: string | null) => void;
+  toggleTopPick: (valueId: string) => void;
   addTier: (label: string, color: string) => void;
   removeTier: (tierId: string) => void;
   updateTierLabel: (tierId: string, label: string) => void;

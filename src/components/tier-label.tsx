@@ -32,7 +32,7 @@ export function TierLabel({ tier }: TierLabelProps) {
 
   return (
     <div
-      className="w-12 md:w-20 min-h-[64px] md:min-h-[80px] flex items-center justify-center text-lg md:text-2xl font-bold shrink-0 cursor-pointer"
+      className="w-12 md:w-[60px] lg:w-20 min-h-[64px] md:min-h-[72px] lg:min-h-[80px] flex items-center justify-center text-lg md:text-xl lg:text-2xl font-bold shrink-0 cursor-pointer"
       style={{ backgroundColor: tier.color, color: '#1a1a1a' }}
       onClick={() => {
         if (!editing) {

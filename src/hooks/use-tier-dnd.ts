@@ -12,7 +12,7 @@ import {
 } from '@dnd-kit/core';
 import { useTierStore } from '@/store/tier-store';
 
-/** Find which tier container a value belongs to */
+/** Find which tier container a value belongs to (reads fresh state) */
 function findContainer(
   assignments: Record<string, string[]>,
   valueId: string
@@ -33,9 +33,15 @@ export const multiContainerCollision: CollisionDetection = (args) => {
   return rectIntersection(args);
 };
 
+/** Read the latest assignments directly from the store (avoids stale closures) */
+function getAssignments() {
+  return useTierStore.getState().assignments;
+}
+
 export function useTierDnd() {
-  const { assignments, moveValue, reorderValue, setActiveValueId } =
-    useTierStore();
+  const moveValue = useTierStore((s) => s.moveValue);
+  const reorderValue = useTierStore((s) => s.reorderValue);
+  const setActiveValueId = useTierStore((s) => s.setActiveValueId);
 
   const handleDragStart = useCallback(
     (event: DragStartEvent) => {
@@ -51,74 +57,52 @@ export function useTierDnd() {
 
       const activeId = active.id as string;
       const overId = over.id as string;
+      if (activeId === overId) return;
+
+      // Always read fresh state to avoid stale closure issues during rapid drags
+      const assignments = getAssignments();
 
       const activeContainer = findContainer(assignments, activeId);
       if (!activeContainer) return;
 
-      // Check if over is a container (tier) or a value
-      let overContainer: string | null = null;
-
-      // If overId matches a tier/container key, that's the container
-      if (assignments[overId] !== undefined) {
-        overContainer = overId;
-      } else {
-        overContainer = findContainer(assignments, overId);
-      }
-
-      if (!overContainer || activeContainer === overContainer) return;
-
-      // Move to new container
-      const overItems = assignments[overContainer] ?? [];
-      const overIndex = overItems.indexOf(overId);
-      const newIndex = overIndex >= 0 ? overIndex : overItems.length;
-
-      moveValue(activeId, activeContainer, overContainer, newIndex);
-    },
-    [assignments, moveValue]
-  );
-
-  const handleDragEnd = useCallback(
-    (event: DragEndEvent) => {
-      const { active, over } = event;
-      setActiveValueId(null);
-
-      if (!over) return;
-
-      const activeId = active.id as string;
-      const overId = over.id as string;
-
-      const activeContainer = findContainer(assignments, activeId);
-      if (!activeContainer) return;
-
-      // If over is a container and active is already in it, no-op
-      if (overId === activeContainer) return;
-
-      // Check if over is in the same container (reorder)
-      const overContainer =
-        assignments[overId] !== undefined
-          ? overId
-          : findContainer(assignments, overId);
+      // Determine if over is a container or a value
+      const isOverContainer = assignments[overId] !== undefined;
+      const overContainer = isOverContainer
+        ? overId
+        : findContainer(assignments, overId);
 
       if (!overContainer) return;
 
       if (activeContainer === overContainer) {
-        // Reorder within same container
-        const items = assignments[activeContainer];
-        const fromIndex = items.indexOf(activeId);
-        const toIndex = items.indexOf(overId);
-        if (fromIndex !== -1 && toIndex !== -1 && fromIndex !== toIndex) {
-          reorderValue(activeContainer, fromIndex, toIndex);
+        // Same container: reorder in real-time so state matches visual transforms.
+        // This prevents the snap-back glitch when drop resolves to the container
+        // instead of an item.
+        if (!isOverContainer) {
+          const items = assignments[activeContainer];
+          const fromIndex = items.indexOf(activeId);
+          const toIndex = items.indexOf(overId);
+          if (fromIndex !== -1 && toIndex !== -1 && fromIndex !== toIndex) {
+            reorderValue(activeContainer, fromIndex, toIndex);
+          }
         }
       } else {
-        // Cross-container move (should have been handled in dragOver,
-        // but handle final placement)
+        // Cross-container move
         const overItems = assignments[overContainer] ?? [];
         const overIndex = overItems.indexOf(overId);
         const newIndex = overIndex >= 0 ? overIndex : overItems.length;
         moveValue(activeId, activeContainer, overContainer, newIndex);
       }
     },
-    [assignments, moveValue, reorderValue, setActiveValueId]
+    [moveValue, reorderValue]
+  );
+
+  const handleDragEnd = useCallback(
+    (event: DragEndEvent) => {
+      setActiveValueId(null);
+      // All moves and reorders are committed in real-time by onDragOver.
+      // onDragEnd only needs to clear the active drag state.
+    },
+    [setActiveValueId]
   );
 
   return {

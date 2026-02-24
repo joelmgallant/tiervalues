@@ -17,7 +17,7 @@ export function UnrankedPool() {
       <SortableContext items={valueIds} strategy={rectSortingStrategy}>
         <div
           ref={setNodeRef}
-          className="flex flex-wrap gap-1 p-2 rounded min-h-[80px] transition-colors"
+          className="flex flex-wrap gap-1 p-2 rounded min-h-[64px] md:min-h-[72px] lg:min-h-[80px] transition-colors"
           style={{
             backgroundColor: isOver
               ? 'rgba(255,255,255,0.05)'
