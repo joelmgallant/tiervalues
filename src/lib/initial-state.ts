@@ -24,11 +24,12 @@ function getValueId(raw: RawValue): string {
 
 const rawValues = (valuesData.values as RawValue[]).filter((v) => v.tier !== null);
 
-const tier1Values = rawValues.filter((v) => v.tier === 1).map(getValueId);
+const tier1TopPicks = rawValues.filter((v) => v.tier === 1 && v.topPick).map(getValueId);
+const tier1Rest = rawValues.filter((v) => v.tier === 1 && !v.topPick).map(getValueId);
 const tier2Values = rawValues.filter((v) => v.tier === 2).map(getValueId);
 const tier3Values = rawValues.filter((v) => v.tier === 3).map(getValueId);
 
-// Split tier 2 (33 values) roughly equally across A, B, C, D
+// Split tier 2 (33 values) across B, C, D
 function splitEvenly(arr: string[], chunks: number): string[][] {
   const result: string[][] = [];
   const chunkSize = Math.ceil(arr.length / chunks);
@@ -38,14 +39,14 @@ function splitEvenly(arr: string[], chunks: number): string[][] {
   return result;
 }
 
-const tier2Split = splitEvenly(tier2Values, 4);
+const tier2Split = splitEvenly(tier2Values, 3);
 
 export const INITIAL_ASSIGNMENTS: TierAssignments = {
-  [DEFAULT_TIERS[0].id]: tier1Values,   // S tier
-  [DEFAULT_TIERS[1].id]: tier2Split[0], // A tier
-  [DEFAULT_TIERS[2].id]: tier2Split[1], // B tier
-  [DEFAULT_TIERS[3].id]: tier2Split[2], // C tier
-  [DEFAULT_TIERS[4].id]: tier2Split[3], // D tier
-  [DEFAULT_TIERS[5].id]: tier3Values,   // F tier
+  [DEFAULT_TIERS[0].id]: tier1TopPicks,  // S tier — only top picks (7)
+  [DEFAULT_TIERS[1].id]: tier1Rest,      // A tier — rest of tier 1 (10)
+  [DEFAULT_TIERS[2].id]: tier2Split[0],  // B tier
+  [DEFAULT_TIERS[3].id]: tier2Split[1],  // C tier
+  [DEFAULT_TIERS[4].id]: tier2Split[2],  // D tier
+  [DEFAULT_TIERS[5].id]: tier3Values,    // F tier
   unranked: [],
 };
