@@ -1,8 +1,14 @@
 # TierValues
 
-A TierMaker-style interactive tier list for ranking 58 personal values. Drag and drop values between S/A/B/C/D/F tiers, customize tier labels and colors, and export your ranking as a PNG.
+A TierMaker-style interactive tier list for ranking 58 personal values — and an experiment in building a full app with Claude agent teams.
 
 **Live demo:** [joelmgallant.github.io/tiervalues](https://joelmgallant.github.io/tiervalues/)
+
+## What is this?
+
+This started as a personal values exercise and turned into a playground for testing [Claude Code](https://docs.anthropic.com/en/docs/claude-code) agent teams. The entire app — from architecture to drag-and-drop to AI-generated icons — was built collaboratively with parallel Claude agents coordinating through shared task lists.
+
+The actual app lets you drag and drop 58 personal values between S/A/B/C/D/F tiers, customize everything, and export your ranking as a PNG.
 
 ## Features
 
@@ -22,6 +28,7 @@ A TierMaker-style interactive tier list for ranking 58 personal values. Drag and
 - [@dnd-kit](https://dndkit.com/) for drag-and-drop
 - [Zustand](https://zustand.docs.pmnd.rs/) for state management
 - [html2canvas-pro](https://github.com/nicolo-ribaudo/html2canvas-pro) for PNG export
+- Value icons generated with [FLUX.1 schnell](https://fal.ai/) via fal.ai
 
 ## Development
 
