@@ -27,7 +27,7 @@ export const VALUES: Value[] = (valuesData.values as RawValue[])
       id,
       name: trimmedName,
       description,
-      imagePath: `/images/values/${id}.png`,
+      imagePath: `/tiervalues/images/values/${id}.png`,
       isTopPick: v.topPick,
     };
   });
