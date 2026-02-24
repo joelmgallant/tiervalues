@@ -117,7 +117,7 @@ const PROMPT_MAP: Record<string, string> = {
 
   // Tier 3
   conformity:
-    "A uniform row of identical silhouette figures standing in perfect formation, muted blue-gray",
+    "Identical colorful wooden blocks arranged in a perfectly neat grid pattern, all the same shape and color, satisfying order and symmetry, bright teal and orange",
   contribution:
     "Hands carefully placing a glowing brick into a growing wall structure, warm collaborative feel",
   industry:

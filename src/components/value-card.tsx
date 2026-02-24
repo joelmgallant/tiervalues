@@ -98,6 +98,13 @@ export function ValueCard({ valueId }: ValueCardProps) {
             top: mousePos.y + 16,
           }}
         >
+          {!imgError && (
+            <img
+              src={value.imagePath}
+              alt=""
+              className="w-32 h-32 rounded mb-2 object-cover"
+            />
+          )}
           <div className="font-bold text-white mb-1">{value.name}</div>
           <div className="text-neutral-400 leading-snug">{value.description}</div>
           {isTopPick && (
