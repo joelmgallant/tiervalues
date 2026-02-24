@@ -1,36 +1,49 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# TierValues
 
-## Getting Started
+A TierMaker-style interactive tier list for ranking 58 personal values. Drag and drop values between S/A/B/C/D/F tiers, customize tier labels and colors, and export your ranking as a PNG.
 
-First, run the development server:
+**Live demo:** [joelmgallant.github.io/tiervalues](https://joelmgallant.github.io/tiervalues/)
+
+## Features
+
+- Drag-and-drop values between tiers with smooth animations
+- Add, remove, rename, and reorder tier rows
+- Customize tier colors from a preset palette
+- Top picks highlighted with a gold ring
+- Export your tier list as a PNG image
+- State persists to localStorage — pick up where you left off
+- Fully client-side, no server required
+
+## Tech Stack
+
+- [Next.js 16](https://nextjs.org/) (App Router, static export)
+- [TypeScript](https://www.typescriptlang.org/)
+- [Tailwind CSS v4](https://tailwindcss.com/)
+- [@dnd-kit](https://dndkit.com/) for drag-and-drop
+- [Zustand](https://zustand.docs.pmnd.rs/) for state management
+- [html2canvas-pro](https://github.com/nicolo-ribaudo/html2canvas-pro) for PNG export
+
+## Development
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000/tiervalues](http://localhost:3000/tiervalues) to view locally.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Build
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build
+```
 
-## Learn More
+Produces a static export in `out/` ready for deployment.
 
-To learn more about Next.js, take a look at the following resources:
+## Deployment
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Pushes to `main` auto-deploy to GitHub Pages via the included GitHub Actions workflow.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## License
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+MIT
