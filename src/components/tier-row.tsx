@@ -25,7 +25,7 @@ export function TierRow({ tierId }: TierRowProps) {
       <SortableContext items={valueIds} strategy={rectSortingStrategy}>
         <div
           ref={setNodeRef}
-          className="flex flex-wrap items-start gap-1 p-1 flex-1 min-h-[80px] transition-colors"
+          className="flex flex-wrap items-start gap-1 p-1 flex-1 min-h-[64px] md:min-h-[80px] transition-colors"
           style={{
             backgroundColor: isOver
               ? 'rgba(255,255,255,0.05)'

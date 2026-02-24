@@ -1,5 +1,7 @@
 'use client';
 
+import { useState } from 'react';
+import Image from 'next/image';
 import { VALUES_BY_ID } from '@/lib/values';
 
 function hashColor(str: string): string {
@@ -17,21 +19,33 @@ interface DragOverlayCardProps {
 
 export function DragOverlayCard({ valueId }: DragOverlayCardProps) {
   const value = VALUES_BY_ID[valueId];
+  const [imgError, setImgError] = useState(false);
+
   if (!value) return null;
 
   const bgColor = hashColor(value.id);
 
   return (
     <div
-      className="relative flex items-center justify-center w-[80px] h-[80px] rounded text-white text-xs font-bold select-none shadow-xl scale-105 opacity-90 cursor-grabbing overflow-hidden"
-      style={{ backgroundColor: bgColor }}
+      className={`relative flex items-center justify-center w-[64px] h-[64px] md:w-[80px] md:h-[80px] rounded text-white text-xs font-bold select-none shadow-xl scale-105 cursor-grabbing overflow-hidden ${
+        value.isTopPick ? 'ring-2 ring-amber-400' : ''
+      }`}
+      style={{ backgroundColor: imgError ? bgColor : 'transparent' }}
     >
-      {value.isTopPick && (
-        <div className="absolute inset-0 rounded ring-2 ring-yellow-400 pointer-events-none" />
+      {!imgError ? (
+        <Image
+          src={value.imagePath}
+          alt={value.name}
+          fill
+          className="object-cover rounded"
+          sizes="80px"
+          onError={() => setImgError(true)}
+        />
+      ) : (
+        <span className="text-center leading-tight px-1 text-[11px]">
+          {value.name}
+        </span>
       )}
-      <span className="text-center leading-tight px-1 text-[11px]">
-        {value.name}
-      </span>
     </div>
   );
 }

@@ -10,6 +10,7 @@ import {
   useSensor,
   useSensors,
 } from '@dnd-kit/core';
+import { sortableKeyboardCoordinates } from '@dnd-kit/sortable';
 import { useTierStore } from '@/store/tier-store';
 import { useTierDnd, multiContainerCollision } from '@/hooks/use-tier-dnd';
 import { TierRow } from './tier-row';
@@ -31,11 +32,14 @@ export function TierList() {
   const touchSensor = useSensor(TouchSensor, {
     activationConstraint: { delay: 200, tolerance: 5 },
   });
-  const keyboardSensor = useSensor(KeyboardSensor);
+  const keyboardSensor = useSensor(KeyboardSensor, {
+    coordinateGetter: sortableKeyboardCoordinates,
+  });
 
   const sensors = useSensors(mouseSensor, touchSensor, keyboardSensor);
 
   const { handleDragStart, handleDragOver, handleDragEnd } = useTierDnd();
+  const setActiveValueId = useTierStore((s) => s.setActiveValueId);
 
   const handleExport = useCallback(async () => {
     if (exportRef.current) {
@@ -54,6 +58,7 @@ export function TierList() {
         onDragStart={handleDragStart}
         onDragOver={handleDragOver}
         onDragEnd={handleDragEnd}
+        onDragCancel={() => setActiveValueId(null)}
       >
         <div ref={exportRef}>
           <div className="rounded overflow-hidden border border-neutral-800">
